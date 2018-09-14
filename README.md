@@ -3,11 +3,8 @@
 ## Brief Description
 
 Personal movie library with own Express API and React Frontend.
-**Live Version:** - https://omdb-client.herokuapp.com/
-**API** - https://omdb-guru.herokuapp.com/
 
 - **Live Version** - https://omdb-client.herokuapp.com/
-- **Client Repo** - https://github.com/krokowski0x/OMDbGuru-Client
 - **API** - https://omdb-guru.herokuapp.com/
 
 ## API Endpoints
