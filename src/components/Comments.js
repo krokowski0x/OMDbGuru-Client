@@ -77,34 +77,35 @@ export default class Comments extends Component {
           placeholder="Add..."
           value={newComment}
           onChange={e => this.setState({ newComment: e.target.value })}
-          style={{
-            paddingBottom: "3rem",
-            width: "50vw"
-          }}
+          style={{ paddingBottom: "3rem", width: "40vw" }}
         />
         <Button positive onClick={this.onCommentAdd}>
           Add New
         </Button>
+        <br />
         {comments.length !== 0 ? (
           <Card.Group centered>
             {comments.map(entry => (
-              <Card fluid key={entry.id}>
-                <Button
-                  animated="vertical"
-                  onClick={() => this.onCommentRemove(entry._id)}
-                >
-                  <Button.Content hidden>Delete</Button.Content>
-                  <Button.Content visible>
-                    <Icon name="x" />
-                  </Button.Content>
-                </Button>
-                <Card.Header>{entry.createdAt}</Card.Header>
+              <Card fluid key={entry._id}>
+                <Card.Content extra textAlign="left">
+                  {entry.createdAt}
+                  <Button
+                    floated="right"
+                    animated="vertical"
+                    onClick={() => this.onCommentRemove(entry._id)}
+                  >
+                    <Button.Content hidden>Delete</Button.Content>
+                    <Button.Content visible>
+                      <Icon name="x" />
+                    </Button.Content>
+                  </Button>
+                </Card.Content>
                 <Card.Content>{entry.comment}</Card.Content>
               </Card>
-            ))}{" "}
+            ))}
           </Card.Group>
         ) : (
-          <div />
+          <h3>No comments yet. Add the first one!</h3>
         )}
       </div>
     );

@@ -13,8 +13,20 @@ export default class MovieDetails extends Component {
   }
 
   render() {
-    const { Poster, Title, Genre, Released, Plot, imdbID } =
-      this.state.movie || null;
+    const {
+      Poster,
+      Title,
+      Genre,
+      Released,
+      Runtime,
+      Country,
+      Rated,
+      Director,
+      Writer,
+      Actors,
+      Plot,
+      imdbID
+    } = this.state.movie || null;
 
     return (
       <Grid>
@@ -23,19 +35,25 @@ export default class MovieDetails extends Component {
             <Image src={Poster} size="medium" centered />
           </Grid.Column>
           <Grid.Column>
-            <h2>{Title}</h2>
-            <h3>{Genre}</h3>
-            <h3>{Released}</h3>
+            <h2>
+              {Title} ({Released})
+            </h2>
+            <h3>
+              {Genre} | {Runtime} | {Country} | {Rated}
+            </h3>
+            <h3>Director: {Director}</h3>
+            <h3>Writer: {Writer}</h3>
+            <h3>Stars: {Actors}</h3>
             <div
               style={{
+                margin: "2rem 0",
                 height: "5px",
-                width: "80%",
+                width: "100%",
                 borderRadius: "10px",
                 background: "linear-gradient(45deg, #00d664, cyan)"
               }}
             />
-
-            <p>{Plot}</p>
+            <h4>{Plot}</h4>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={1}>

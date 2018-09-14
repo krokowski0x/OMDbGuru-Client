@@ -14,7 +14,7 @@ export default class SignUp extends Component {
   }
 
   onSignUp = () => {
-    const { currentUser, loggedIn } = this.state;
+    const { currentUser } = this.state;
 
     fetch("https://omdb-guru.herokuapp.com/users", {
       method: "POST",
@@ -27,7 +27,7 @@ export default class SignUp extends Component {
   };
 
   onLogIn = () => {
-    const { currentUser, loggedIn } = this.state;
+    const { currentUser } = this.state;
 
     fetch("https://omdb-guru.herokuapp.com/users/login", {
       method: "POST",
