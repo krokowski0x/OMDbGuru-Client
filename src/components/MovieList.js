@@ -36,7 +36,7 @@ const MovieList = props => {
               />
               <Card.Content textAlign="center">
                 <Card.Header>
-                  {movie.title} ({movie.movie.Released})
+                  {movie.title} ({movie.movie.Year})
                 </Card.Header>
                 <Card.Meta>{movie.movie.Genre}</Card.Meta>
                 <Card.Meta>by {movie.movie.Director}</Card.Meta>

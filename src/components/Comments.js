@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Input, Icon } from "semantic-ui-react";
+import { Card, Button, Input, Icon, Message } from "semantic-ui-react";
 
 export default class Comments extends Component {
   constructor(props) {
@@ -8,7 +8,9 @@ export default class Comments extends Component {
       token: this.props.token,
       id: this.props.id,
       comments: [],
-      newComment: ""
+      newComment: "",
+      loading: false,
+      errorMessage: ""
     };
   }
 
@@ -25,25 +27,31 @@ export default class Comments extends Component {
       }
     })
       .then(res => res.json())
-      .then(result => this.setState({ comments: result.comments }))
+      .then(result =>
+        this.setState({ comments: result.comments, loading: false })
+      )
       .catch(err => console.error(err));
   };
 
-  onCommentAdd = () => {
-    fetch(`https://omdb-guru.herokuapp.com/comments/`, {
-      method: "POST",
-      body: JSON.stringify({
-        id: this.state.id,
-        comment: this.state.newComment
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Auth": this.state.token
-      }
-    })
-      .then(() => this.setState({ newComment: "" }))
-      .then(() => this.getCommentList())
-      .catch(err => console.error(err));
+  onCommentAdd = async () => {
+    this.setState({ loading: true });
+    try {
+      await fetch(`https://omdb-guru.herokuapp.com/comments/`, {
+        method: "POST",
+        body: JSON.stringify({
+          id: this.state.id,
+          comment: this.state.newComment
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Auth": this.state.token
+        }
+      });
+      this.setState({ newComment: "" });
+      await this.getCommentList();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   onCommentRemove = async id => {
@@ -55,14 +63,16 @@ export default class Comments extends Component {
           "X-Auth": this.state.token
         }
       });
-      this.getCommentList();
+      await this.getCommentList();
     } catch (err) {
-      console.error(err);
+      this.setState({
+        errorMessage: "Hey, don't even try that! It's not Your comment!"
+      });
     }
   };
 
   render() {
-    const { comments, newComment } = this.state;
+    const { comments, newComment, loading, errorMessage } = this.state;
 
     return (
       <div
@@ -79,10 +89,11 @@ export default class Comments extends Component {
           onChange={e => this.setState({ newComment: e.target.value })}
           style={{ paddingBottom: "3rem", width: "40vw" }}
         />
-        <Button positive onClick={this.onCommentAdd}>
+        <Button positive onClick={this.onCommentAdd} loading={loading}>
           Add New
         </Button>
-        <br />
+        {errorMessage ? <Message negative>{errorMessage}</Message> : <div />}
+
         {comments.length !== 0 ? (
           <Card.Group centered>
             {comments.map(entry => (

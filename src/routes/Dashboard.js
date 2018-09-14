@@ -9,8 +9,8 @@ export default class Dashboard extends Component {
     this.state = {
       movies: [],
       token: this.props.token,
-      errorMessage: "",
-      title: ""
+      title: "",
+      loading: false
     };
   }
 
@@ -32,6 +32,7 @@ export default class Dashboard extends Component {
 
   onMovieAdd = async () => {
     const { title, token } = this.state;
+    this.setState({ loading: true });
     try {
       await fetch("https://omdb-guru.herokuapp.com/movies", {
         method: "POST",
@@ -42,6 +43,7 @@ export default class Dashboard extends Component {
         }
       });
       await this.getMovieList();
+      this.setState({ loading: false });
     } catch (err) {
       console.error("Error:", err);
     }
@@ -64,7 +66,7 @@ export default class Dashboard extends Component {
   };
 
   render() {
-    const { movies, title, token } = this.state;
+    const { movies, title, token, loading } = this.state;
 
     return (
       <div>
@@ -76,7 +78,7 @@ export default class Dashboard extends Component {
           value={title}
           onChange={e => this.setState({ title: e.target.value })}
         />
-        <Button positive onClick={this.onMovieAdd}>
+        <Button positive onClick={this.onMovieAdd} loading={loading}>
           Add
         </Button>
         <MovieList

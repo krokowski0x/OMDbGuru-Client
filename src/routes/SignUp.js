@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Card } from "semantic-ui-react";
+import { Button, Form, Card, Message } from "semantic-ui-react";
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -9,13 +9,16 @@ export default class SignUp extends Component {
         username: "",
         password: ""
       },
-      errorMessage: ""
+      errorMessage: "",
+      loading: false
     };
   }
 
   onSignUp = () => {
     const { currentUser } = this.state;
-
+    this.setState({
+      errorMessage: ""
+    });
     fetch("https://omdb-guru.herokuapp.com/users", {
       method: "POST",
       mode: "cors",
@@ -23,12 +26,17 @@ export default class SignUp extends Component {
       headers: {
         "Content-Type": "application/json"
       }
-    }).catch(error => console.error("Error:", error));
+    }).catch(err =>
+      this.setState({
+        errorMessage:
+          "Something went wrong. Make sure Your username is 5 to 20 characters long and password is at lesat 6."
+      })
+    );
   };
 
   onLogIn = () => {
     const { currentUser } = this.state;
-
+    this.setState({ loading: true });
     fetch("https://omdb-guru.herokuapp.com/users/login", {
       method: "POST",
       body: JSON.stringify(currentUser),
@@ -37,13 +45,23 @@ export default class SignUp extends Component {
       }
     })
       .then(res => res.json())
-      .then(result => this.props.onSignIn(result.tokens[0].token))
-      .catch(error => console.error("Error:", error));
+      .then(result => {
+        this.setState({ loading: false });
+        this.props.onSignIn(result.tokens[0].token);
+      })
+      .catch(err =>
+        this.setState({
+          errorMessage:
+            "Something went wrong. Make sure You sign up first or check Your spelling."
+        })
+      );
   };
 
   render() {
     const {
-      currentUser: { username, password }
+      currentUser: { username, password },
+      errorMessage,
+      loading
     } = this.state;
 
     return (
@@ -83,11 +101,11 @@ export default class SignUp extends Component {
               }
             />
           </Form.Field>
-
+          {errorMessage ? <Message negative>{errorMessage}</Message> : <div />}
           <Button.Group>
             <Button onClick={this.onSignUp}>Sign Up</Button>
             <Button.Or />
-            <Button positive onClick={this.onLogIn}>
+            <Button positive onClick={this.onLogIn} loading={loading}>
               Log In
             </Button>
           </Button.Group>

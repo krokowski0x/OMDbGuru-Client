@@ -17,7 +17,7 @@ export default class MovieDetails extends Component {
       Poster,
       Title,
       Genre,
-      Released,
+      Year,
       Runtime,
       Country,
       Rated,
@@ -36,7 +36,7 @@ export default class MovieDetails extends Component {
           </Grid.Column>
           <Grid.Column>
             <h2>
-              {Title} ({Released})
+              {Title} ({Year})
             </h2>
             <h3>
               {Genre} | {Runtime} | {Country} | {Rated}
